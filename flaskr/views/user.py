@@ -4,7 +4,6 @@ from .base import index, create, get, update
 
 
 user_bp = Blueprint("user", __name__)
-#user.route("/", methods=["GET", "POST"])(user_view)
 
 @user_bp.route('/', methods=('GET', 'POST'))
 def user():
