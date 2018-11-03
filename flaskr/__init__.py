@@ -3,7 +3,7 @@ from flask import Flask, request, flash, url_for, redirect, \
      render_template, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-from .models.user import User
+from .models import User, UserPlant
 from .database import db
 from .exceptions import InvalidUsage, FormError
 from .views import user
