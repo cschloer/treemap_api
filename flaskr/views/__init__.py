@@ -1,1 +1,1 @@
-from .user import user_bp as user
+from .user_plant import user_plant_bp

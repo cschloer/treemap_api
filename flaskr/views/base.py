@@ -52,3 +52,10 @@ def update(model, form, id_):
     m = model.query.get(id_).to_dict()
     db.session.commit()
     return jsonify(m)
+
+def delete(model, id_):
+    ''' A base delete function '''
+    m = model.query.get(id_).to_dict()
+    model.query.filter_by(id=id_).delete()
+    db.session.commit()
+    return jsonify(m)

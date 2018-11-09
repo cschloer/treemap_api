@@ -3,10 +3,10 @@ from flask import Flask, request, flash, url_for, redirect, \
      render_template, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-from .models import User, UserPlant
+from .models import *
 from .database import db
 from .exceptions import InvalidUsage, FormError
-from .views import user
+from .views import user_plant_bp
 import os
 
 
@@ -25,6 +25,9 @@ app.config.from_mapping(
     SQLALCHEMY_TRACK_MODIFICATIONS=False,
 )
 
-db.init_app(app)
+app.register_blueprint(user_plant_bp, url_prefix='/userplant')
+
+with app.app_context():
+    db.init_app(app)
+    db.create_all()
 migrate = Migrate(app, db)
-app.register_blueprint(user, url_prefix='/user')
