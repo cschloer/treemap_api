@@ -4,9 +4,11 @@ from werkzeug import secure_filename
 import datetime
 import io
 import six
+import base64
 
 from ..models import UserPlantImage
 from .base import index, create, get, update, delete
+from ..exceptions import InvalidUsage
 
 
 user_plant_image_bp = Blueprint("userplantimage", __name__)
@@ -31,12 +33,10 @@ def user_plant_image_id(id_):
 def user_plant_image_storage():
     if request.method == 'POST':
         args = request.json
-        stream = args.get('base64')
-        print('HERE', args);
-        print(current_app.config.get('GOOGLE_CLOUD_PROJECT_ID'))
-        url = upload_file(stream, args.get('name'), args.get('content_type'))
+        base64_data = args.get('base64')
+        data = base64.decodebytes(base64_data.encode())
+        url = upload_file(data, args.get('name'), args.get('content_type'))
         return jsonify({'url': url})
-        #return create(UserPlantImage, request.json)
 
 
 def _get_storage_client():
@@ -45,10 +45,13 @@ def _get_storage_client():
     )
 
 def _check_extension(filename, allowed_extensions):
-    if ('.' not in filename or
-            filename.split('.').pop().lower() not in allowed_extensions):
-        raise BadRequest(
-            "{0} has an invalid name or extension".format(filename))
+    if (
+        '.' not in filename
+        or filename.split('.').pop().lower() not in allowed_extensions
+    ):
+        raise InvalidUsage(
+            "{0} has an invalid name or extension".format(filename)
+        )
 
 
 def _safe_filename(filename):

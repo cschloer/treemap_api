@@ -16,6 +16,7 @@ class UserPlant(db.Model):
 
     def to_dict(self):
         images = [image.to_dict() for image in self.images]
+        images.reverse()
         return {
             'id': self.id,
             'user_id': self.user_id,
