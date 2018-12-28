@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
-from ..models import UserPlant
-from ..exceptions import FormError
+from ..models import UserPlant, UserPlantImage
+from ..exceptions import FormError, InvalidUsage
 from .base import index, create, get, update, delete
 
 

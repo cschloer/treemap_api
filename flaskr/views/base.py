@@ -44,18 +44,27 @@ def create(model, form):
 
 def get(model, id_):
     ''' A base get by id function '''
-    return jsonify(model.query.get(id_).to_dict())
+    try:
+        return jsonify(model.query.get(id_).to_dict())
+    except AttributeError:
+        raise InvalidUsage("An object with that id does not exist")
 
 def update(model, form, id_):
     ''' A base update function '''
-    model.query.filter_by(id=id_).update(form)
-    m = model.query.get(id_).to_dict()
-    db.session.commit()
-    return jsonify(m)
+    try:
+        model.query.filter_by(id=id_).update(form)
+        m = model.query.get(id_).to_dict()
+        db.session.commit()
+        return jsonify(m)
+    except AttributeError:
+        raise InvalidUsage("An object with that id does not exist")
 
 def delete(model, id_):
     ''' A base delete function '''
-    m = model.query.get(id_).to_dict()
-    model.query.filter_by(id=id_).delete()
-    db.session.commit()
-    return jsonify(m)
+    try:
+        m = model.query.get(id_).to_dict()
+        model.query.filter_by(id=id_).delete()
+        db.session.commit()
+        return jsonify(m)
+    except AttributeError:
+        raise InvalidUsage("An object with that id does not exist")

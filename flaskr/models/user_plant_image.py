@@ -4,7 +4,7 @@ from datetime import datetime
 class UserPlantImage(db.Model):
     __tablename__ = 'userplantimage'
     id = db.Column('user_plant_image_id', db.Integer, primary_key=True)
-    user_plant_id = db.Column(db.String(60), db.ForeignKey('userplant.user_plant_id'), nullable=False)
+    user_plant_id = db.Column(db.Integer, db.ForeignKey('userplant.user_plant_id'), nullable=False)
     url = db.Column(db.String)
     created = db.Column(db.DateTime)
 
