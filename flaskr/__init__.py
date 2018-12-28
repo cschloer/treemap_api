@@ -6,11 +6,13 @@ from flask_migrate import Migrate
 from .models import *
 from .database import db
 from .exceptions import InvalidUsage, FormError
-from .views import user_plant_bp
+from .views import user_plant_bp, user_plant_image_bp
 import os
 
 
 app = Flask(__name__)
+
+gstones = 0
 
 @app.errorhandler(InvalidUsage)
 @app.errorhandler(FormError)
@@ -23,9 +25,13 @@ app.config.from_mapping(
     SECRET_KEY='dev',
     SQLALCHEMY_DATABASE_URI='sqlite:///' + os.path.join(app.instance_path, 'flaskr.sqlite'),
     SQLALCHEMY_TRACK_MODIFICATIONS=False,
+    GOOGLE_CLOUD_PROJECT_ID=os.environ['GOOGLE_CLOUD_PROJECT_ID'],
+    GOOGLE_CLOUD_STORAGE_BUCKET=os.environ['GOOGLE_CLOUD_STORAGE_BUCKET'],
+    GOOGLE_CLOUD_ALLOWED_EXTENSIONS=os.environ['GOOGLE_CLOUD_ALLOWED_EXTENSIONS'].split(','),
 )
 
 app.register_blueprint(user_plant_bp, url_prefix='/userplant')
+app.register_blueprint(user_plant_image_bp, url_prefix='/userplantimage')
 
 with app.app_context():
     db.init_app(app)

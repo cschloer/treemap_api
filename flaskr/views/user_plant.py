@@ -1,5 +1,6 @@
 from flask import Blueprint, request, jsonify
 from ..models import UserPlant
+from ..exceptions import FormError
 from .base import index, create, get, update, delete
 
 
@@ -17,6 +18,8 @@ def user_plant_id(id_):
     if request.method == 'GET':
         return get(UserPlant, id_)
     if request.method == 'PUT':
+        if request.json.get('user_id'):
+            raise FormError(f'The user_id of a user_plant object ({id_}) cannot be changed')
         return update(UserPlant, request.json, id_)
     if request.method == 'DELETE':
         return delete(UserPlant, id_)
