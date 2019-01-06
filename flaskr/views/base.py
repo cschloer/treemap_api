@@ -34,6 +34,7 @@ def index(model, filter_args):
 
 def create(model, form):
     ''' A base create function '''
+    print('creating', form)
     try:
         m = model(**form)
     except KeyError as e:
