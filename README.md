@@ -1,5 +1,5 @@
-# plantme_api
-API for planme
+# treemap_api
+API for treemap
 
 # flask migrations
 ```
