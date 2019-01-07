@@ -32,16 +32,20 @@ def index(model, filter_args):
         in query.all()
     ])
 
-def create(model, form):
+def create(model, form, commit=True, jsonify=True):
     ''' A base create function '''
-    print('creating', form)
     try:
         m = model(**form)
     except KeyError as e:
         raise FormError(f'Missing a value in the form: {str(e)}')
     db.session.add(m)
-    db.session.commit()
-    return jsonify(m.to_dict())
+    if commit:
+        db.session.commit()
+    else:
+        db.session.flush()
+    if jsonify:
+        return jsonify(m.to_dict())
+    return m.to_dict()
 
 def get(model, id_):
     ''' A base get by id function '''

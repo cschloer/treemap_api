@@ -15,9 +15,7 @@ class Tree(db.Model):
 
     def to_dict(self):
         locations = [location.to_dict() for location in self.locations]
-        print('locations', locations)
         species_votes = [species_vote.to_dict() for species_vote in self.species_votes]
-        print('s otes', species_votes)
         return {
             'id': self.id,
             'user_id': self.user_id,
