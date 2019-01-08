@@ -32,7 +32,7 @@ def index(model, filter_args):
         in query.all()
     ])
 
-def create(model, form, commit=True, jsonify=True):
+def create(model, form, commit=True, string=True):
     ''' A base create function '''
     try:
         m = model(**form)
@@ -43,7 +43,7 @@ def create(model, form, commit=True, jsonify=True):
         db.session.commit()
     else:
         db.session.flush()
-    if jsonify:
+    if string:
         return jsonify(m.to_dict())
     return m.to_dict()
 

@@ -9,6 +9,7 @@ from .exceptions import InvalidUsage, FormError
 from .views import (
     user_plant_bp, user_plant_image_bp,
     tree_bp, species_bp, tree_species_vote_bp,
+    tree_image_bp,
 )
 import os
 
@@ -35,7 +36,8 @@ app.register_blueprint(user_plant_bp, url_prefix='/userplant')
 app.register_blueprint(user_plant_image_bp, url_prefix='/userplantimage')
 app.register_blueprint(tree_bp, url_prefix='/tree')
 app.register_blueprint(species_bp, url_prefix='/species')
-app.register_blueprint(tree_species_vote_bp, url_prefix='/tree_species_vote')
+app.register_blueprint(tree_species_vote_bp, url_prefix='/treespeciesvote')
+app.register_blueprint(tree_image_bp, url_prefix='/treeimage')
 
 with app.app_context():
     db.init_app(app)

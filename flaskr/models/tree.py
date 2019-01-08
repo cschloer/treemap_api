@@ -1,5 +1,6 @@
 from ..database import db
 from datetime import datetime
+from ..helpers import transform_species_votes
 
 class Tree(db.Model):
     __tablename__ = 'tree'
@@ -9,6 +10,7 @@ class Tree(db.Model):
     latitude = db.Column(db.Float(12))
     longitude = db.Column(db.Float(12))
     species_votes = db.relationship('TreeSpeciesVote', lazy="joined")
+    images = db.relationship('TreeImage', lazy="joined")
 
     def __init__(self, user_id, latitude, longitude):
         self.user_id = user_id
@@ -17,7 +19,10 @@ class Tree(db.Model):
         self.created = datetime.utcnow()
 
     def to_dict(self):
-        species_votes = [species_vote.to_dict() for species_vote in self.species_votes]
+        # Tally the votes in a dictionary
+        species_votes = transform_species_votes(self.species_votes)
+
+        images = [image.to_dict() for image in self.images]
         return {
             'id': self.id,
             'user_id': self.user_id,
@@ -25,4 +30,5 @@ class Tree(db.Model):
             'latitude': self.latitude,
             'longitude': self.longitude,
             'species_votes': species_votes,
+            'images': images,
         }
