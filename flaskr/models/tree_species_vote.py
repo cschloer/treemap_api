@@ -11,14 +11,14 @@ class TreeSpeciesVote(db.Model):
         db.ForeignKey('species.species_id'),
         nullable=False,
     )
-    created = db.Column(db.DateTime)
+    created = db.Column(db.DateTime, default=datetime.utcnow)
+    updated = db.Column(db.DateTime, onupdate=datetime.utcnow, default=datetime.utcnow)
     species = db.relationship('Species')
 
     def __init__(self, user_id, tree_id, species_id):
         self.user_id = user_id
         self.species_id = species_id
         self.tree_id = tree_id
-        self.created = datetime.utcnow()
 
     def to_dict(self):
         return {
@@ -27,5 +27,6 @@ class TreeSpeciesVote(db.Model):
             'species_id': self.species_id,
             'tree_id': self.tree_id,
             'created': self.created,
+            'updated': self.updated,
             'species': self.species.to_dict(),
         }
