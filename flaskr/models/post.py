@@ -10,6 +10,7 @@ class Post(db.Model):
     created = db.Column(db.DateTime, default=datetime.utcnow)
     updated = db.Column(db.DateTime, onupdate=datetime.utcnow, default=datetime.utcnow)
     comments = db.relationship('PostComment')
+    tree = db.relationship('Tree', back_populates='posts')
 
     def __init__(self, user_id, tree_id, text):
         self.user_id = user_id
@@ -18,6 +19,7 @@ class Post(db.Model):
 
     def to_dict(self):
         comments = [comment.to_dict() for comment in self.comments]
+
         return {
             'id': self.id,
             'user_id': self.user_id,
@@ -26,4 +28,5 @@ class Post(db.Model):
             'created': self.created,
             'updated': self.updated,
             'comments': comments,
+            'tree': self.tree.to_dict(),
         }

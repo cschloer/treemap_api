@@ -8,9 +8,10 @@ class Tree(db.Model):
     user_id = db.Column(db.String(60), nullable=False)
     latitude = db.Column(db.Float(12))
     longitude = db.Column(db.Float(12))
-    species_votes = db.relationship('TreeSpeciesVote', lazy="joined")
-    images = db.relationship('TreeImage', lazy="joined")
+    species_votes = db.relationship('TreeSpeciesVote', lazy='joined')
+    images = db.relationship('TreeImage', lazy='joined')
     created = db.Column(db.DateTime, default=datetime.utcnow)
+    posts = db.relationship('Post', back_populates='tree', lazy='noload')
 
     def __init__(self, user_id, latitude, longitude):
         self.user_id = user_id

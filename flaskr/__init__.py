@@ -5,6 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from .models import *
 from .database import db
+from .redis import redis
 from .exceptions import InvalidUsage, FormError
 from .views import (
     user_plant_bp, user_plant_image_bp,
