@@ -2,11 +2,12 @@ from flask import Blueprint, request, jsonify
 from ..models import PostComment
 from ..exceptions import FormError, InvalidUsage
 from .base import index, create, get, update, delete
-
+from ..decorators import add_user_names
 
 post_comment_bp = Blueprint("postcomment", __name__)
 
 @post_comment_bp.route('/', methods=('GET', 'POST'))
+@add_user_names
 def post_comment():
     if request.method == 'GET':
         return index(PostComment, request.args.to_dict())
