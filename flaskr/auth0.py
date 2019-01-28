@@ -73,6 +73,6 @@ def get_user_names(user_ids):
         # Find all user ids that were not found
         if user_id not in user_names:
             user_names[user_id] = 'Unknown user'
-            redis.set(user_id, user_name)
+            redis.set(user_id, 'Unknown user')
 
     return user_names
