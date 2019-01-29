@@ -36,8 +36,6 @@ for species in species_without_urls:
     new_url = results[list(results.keys())[0]]['fullurl']
     species_id_to_url[species['id']] = new_url
     counter += 1
-    if counter == 1:
-        break
 print(f'Gathered {counter} total urls!')
 
 counter = 0
