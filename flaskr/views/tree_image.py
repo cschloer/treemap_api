@@ -16,7 +16,7 @@ tree_image_bp = Blueprint("treeimage", __name__)
 @tree_image_bp.route('/', methods=('GET', 'POST'))
 def tree_image():
     if request.method == 'GET':
-        return index(TreeImage, request.args.to_dict())
+        return index(TreeImage, request.args.copy())
     if request.method == 'POST':
         return create(TreeImage, request.json)
 

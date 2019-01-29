@@ -9,7 +9,7 @@ tree_species_vote_bp = Blueprint("tree_species_vote", __name__)
 @tree_species_vote_bp.route('/', methods=('GET', 'POST'))
 def tree_species_vote():
     if request.method == 'GET':
-        return index(TreeSpeciesVote, request.args.to_dict())
+        return index(TreeSpeciesVote, request.args.copy())
     if request.method == 'POST':
         return create(TreeSpeciesVote, request.json)
 

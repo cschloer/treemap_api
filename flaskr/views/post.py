@@ -13,7 +13,7 @@ post_bp = Blueprint("post", __name__)
 @add_user_names
 def post():
     if request.method == 'GET':
-        return index(Post, request.args.to_dict())
+        return index(Post, request.args.copy())
     if request.method == 'POST':
         # Handle creating a tree first if the tree has not been created
         if not request.json.get('tree_id', None):
@@ -28,8 +28,11 @@ def post():
         db.session.commit()
         return jsonify(post)
 
-@post_bp.route('/<int:id_>', methods=())
+@post_bp.route('/<int:id_>', methods=('GET',))
+@add_user_names
 def post_id(id_):
+    if request.method == 'GET':
+        return get(Post, id_)
     if request.method == 'DELETE':
         return delete(Post, id_)
 

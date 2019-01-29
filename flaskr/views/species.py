@@ -9,7 +9,7 @@ species_bp = Blueprint("species", __name__)
 @species_bp.route('/', methods=('GET', 'POST'))
 def species():
     if request.method == 'GET':
-        return index(Species, request.args.to_dict())
+        return index(Species, request.args.copy())
     if request.method == 'POST':
         return create(Species, request.json)
 

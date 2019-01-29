@@ -11,7 +11,7 @@ class Tree(db.Model):
     species_votes = db.relationship('TreeSpeciesVote', lazy='joined')
     images = db.relationship('TreeImage', lazy='joined')
     created = db.Column(db.DateTime, default=datetime.utcnow)
-    posts = db.relationship('Post', back_populates='tree', lazy='noload')
+    posts = db.relationship('Post', back_populates='tree', lazy='joined')
 
     def __init__(self, user_id, latitude, longitude):
         self.user_id = user_id
@@ -23,6 +23,8 @@ class Tree(db.Model):
         species_votes = transform_species_votes(self.species_votes)
 
         images = [image.to_dict() for image in self.images]
+        # Get the posts without spiraling into recursion hell
+        posts = [post.to_dict(get_tree=False) for post in self.posts]
         return {
             'id': self.id,
             'user_id': self.user_id,
@@ -31,4 +33,5 @@ class Tree(db.Model):
             'longitude': self.longitude,
             'species_votes': species_votes,
             'images': images,
+            'posts': posts,
         }

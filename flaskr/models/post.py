@@ -17,10 +17,9 @@ class Post(db.Model):
         self.tree_id = tree_id
         self.text = text
 
-    def to_dict(self):
+    def to_dict(self, get_tree=True):
         comments = [comment.to_dict() for comment in self.comments]
-
-        return {
+        return_dict = {
             'id': self.id,
             'user_id': self.user_id,
             'tree_id': self.tree_id,
@@ -28,5 +27,7 @@ class Post(db.Model):
             'created': self.created,
             'updated': self.updated,
             'comments': comments,
-            'tree': self.tree.to_dict(),
         }
+        if get_tree:
+            return_dict['tree'] = self.tree.to_dict()
+        return return_dict

@@ -2,6 +2,8 @@ from flask import jsonify
 from ..exceptions import InvalidUsage, FormError
 from ..database import db
 
+filter_seperator = ';'
+
 def index(model, filter_args):
     ''' A base index function '''
     query = model.query
@@ -13,10 +15,39 @@ def index(model, filter_args):
         query = query.order_by(model.created.desc())
     else:
         raise InvalidUsage('order filter param must be one of \'desc\' or \'asc\'')
-
     limit = filter_args.pop('limit', None)
+    raw_filters = filter_args.poplist('filter')
 
     query = query.filter_by(**filter_args)
+
+    # Adapted from https://stackoverflow.com/questions/14845196/dynamically-constructing-filters-in-sqlalchemy
+    for raw in raw_filters:
+        try:
+            key, op, value = raw.split(filter_seperator, 3)
+        except ValueError:
+            raise FormError(f'Invalid filter: {raw}')
+        column = getattr(model, key, None)
+        if not column:
+            raise FormError(f'Invalid filter column: ${key}')
+        if op == 'in':
+            filt = column.in_(value.split(','))
+        else:
+            try:
+              attr = list(filter(
+                lambda e: hasattr(column, e % op),
+                ['%s', '%s_', '__%s__']
+              ))[0]
+              attr = attr % op
+              #% op
+
+              print(attr)
+              # print (attr % op)
+            except IndexError:
+              raise FormError(f'Invalid filter operator: {op}')
+            if value == 'null':
+              value = None
+            filt = getattr(column, attr)(value)
+        query = query.filter(filt)
 
     if limit:
         try:

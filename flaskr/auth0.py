@@ -59,9 +59,16 @@ def get_user_names(user_ids):
             users = res.json()
             # Iterate through all of the newfound users
             for user in users:
-                first_name = user['given_name']
-                last_initial = f' {user["family_name"][0]}.' if user['family_name'] else ''
-                user_name = f'{first_name}{last_initial}'
+                print('user', user)
+                user_name = 'user'
+                if 'given_name' in user:
+                    first_name = user['given_name']
+                    last_initial = f' {user["family_name"][0]}.' if user['family_name'] else ''
+                    user_name = f'{first_name}{last_initial}'
+                elif 'nickname' in user:
+                    user_name = user['nickname']
+                elif 'name' in user:
+                    user_name = user['name']
                 # Add the username to the return object
                 user_names[user['user_id']] = user_name
                 # Add the username to the cache

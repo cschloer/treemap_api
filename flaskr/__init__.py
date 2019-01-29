@@ -8,7 +8,6 @@ from .database import db
 from .redis import redis
 from .exceptions import InvalidUsage, FormError
 from .views import (
-    user_plant_bp, user_plant_image_bp,
     tree_bp, species_bp, tree_species_vote_bp,
     tree_image_bp, post_bp, post_comment_bp
 )
@@ -33,8 +32,6 @@ app.config.from_mapping(
     GOOGLE_CLOUD_ALLOWED_EXTENSIONS=os.environ['GOOGLE_CLOUD_ALLOWED_EXTENSIONS'].split(','),
 )
 
-app.register_blueprint(user_plant_bp, url_prefix='/userplant')
-app.register_blueprint(user_plant_image_bp, url_prefix='/userplantimage')
 app.register_blueprint(tree_bp, url_prefix='/tree')
 app.register_blueprint(species_bp, url_prefix='/species')
 app.register_blueprint(tree_species_vote_bp, url_prefix='/treespeciesvote')

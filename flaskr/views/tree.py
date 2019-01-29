@@ -40,7 +40,7 @@ def create_tree(json):
 @add_user_names
 def tree():
     if request.method == 'GET':
-        return index(Tree, request.args.to_dict())
+        return index(Tree, request.args.copy())
     if request.method == 'POST':
         # A custom POST to allow all of the objects to be added at the same time
         tree = create_tree(request.json)

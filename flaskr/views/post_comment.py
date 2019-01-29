@@ -10,7 +10,7 @@ post_comment_bp = Blueprint("postcomment", __name__)
 @add_user_names
 def post_comment():
     if request.method == 'GET':
-        return index(PostComment, request.args.to_dict())
+        return index(PostComment, request.args.copy())
     if request.method == 'POST':
         return create(PostComment, request.json)
 
