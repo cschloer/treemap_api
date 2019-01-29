@@ -9,7 +9,8 @@ from .redis import redis
 from .exceptions import InvalidUsage, FormError
 from .views import (
     tree_bp, species_bp, tree_species_vote_bp,
-    tree_image_bp, post_bp, post_comment_bp
+    tree_image_bp, post_bp, post_comment_bp,
+    species_url_bp,
 )
 import os
 
@@ -34,6 +35,7 @@ app.config.from_mapping(
 
 app.register_blueprint(tree_bp, url_prefix='/tree')
 app.register_blueprint(species_bp, url_prefix='/species')
+app.register_blueprint(species_url_bp, url_prefix='/speciesurl')
 app.register_blueprint(tree_species_vote_bp, url_prefix='/treespeciesvote')
 app.register_blueprint(tree_image_bp, url_prefix='/treeimage')
 app.register_blueprint(post_bp, url_prefix='/post')
