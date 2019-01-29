@@ -18,7 +18,7 @@ def index(model, filter_args):
     limit = filter_args.pop('limit', None)
     raw_filters = filter_args.poplist('filter')
 
-    query = query.filter_by(**filter_args)
+    query = query.filter_by(**filter_args.to_dict())
 
     # Adapted from https://stackoverflow.com/questions/14845196/dynamically-constructing-filters-in-sqlalchemy
     for raw in raw_filters:
@@ -38,10 +38,6 @@ def index(model, filter_args):
                 ['%s', '%s_', '__%s__']
               ))[0]
               attr = attr % op
-              #% op
-
-              print(attr)
-              # print (attr % op)
             except IndexError:
               raise FormError(f'Invalid filter operator: {op}')
             if value == 'null':
