@@ -1,4 +1,10 @@
-from flask import g
+from flask import Flask, request, _request_ctx_stack
+from six.moves.urllib.request import urlopen
+from flask_cors import cross_origin
+from .exceptions import AuthError, ServerError
+from jose import jwt
+import json
+import os
 import time
 import requests
 from .redis import redis
@@ -59,7 +65,6 @@ def get_user_names(user_ids):
             users = res.json()
             # Iterate through all of the newfound users
             for user in users:
-                print('user', user)
                 user_name = 'user'
                 if 'given_name' in user:
                     first_name = user['given_name']
@@ -83,3 +88,73 @@ def get_user_names(user_ids):
             redis.set(user_id, 'Unknown user')
 
     return user_names
+
+def get_token_auth_header():
+    """Obtains the Access Token from the Authorization Header
+    """
+    auth = request.headers.get('Authorization', None)
+    if not auth:
+        raise AuthError('Authorization header is expected')
+
+    parts = auth.split()
+
+    if parts[0].lower() != "bearer":
+        raise AuthError('Authorization header must start with "Bearer"')
+    elif len(parts) == 1:
+        raise AuthError('Token not found')
+    elif len(parts) > 2:
+        raise AuthError('Authorization header must be "Bearer token"')
+
+    token = parts[1]
+    return token
+
+def verify_auth():
+    AUTH0_DOMAIN = os.environ.get('AUTH0_DOMAIN', None)
+    AUTH0_API_AUDIENCE = os.environ.get('AUTH0_API_AUDIENCE', None)
+    AUTH0_ALGORITHMS_STRING = os.environ.get('AUTH0_ALGORITHMS', None)
+    if not AUTH0_DOMAIN or not AUTH0_API_AUDIENCE or not AUTH0_ALGORITHMS_STRING:
+        raise ServerError('One or more AUTH0 environment variables not set')
+    AUTH0_ALGORITHMS = AUTH0_ALGORITHMS_STRING.split(',')
+
+    print('Audience', AUTH0_API_AUDIENCE)
+
+    token = get_token_auth_header()
+    jsonurl = urlopen("https://"+AUTH0_DOMAIN+"/.well-known/jwks.json")
+    jwks = json.loads(jsonurl.read())
+    unverified_header = jwt.get_unverified_header(token)
+    rsa_key = {}
+    for key in jwks["keys"]:
+        if key["kid"] == unverified_header["kid"]:
+            rsa_key = {
+                "kty": key["kty"],
+                "kid": key["kid"],
+                "use": key["use"],
+                "n": key["n"],
+                "e": key["e"],
+            }
+    if rsa_key:
+        try:
+            payload = jwt.decode(
+                token,
+                rsa_key,
+                algorithms=AUTH0_ALGORITHMS,
+                audience=AUTH0_API_AUDIENCE,
+                issuer=f'https://{AUTH0_DOMAIN}/',
+            )
+        except jwt.ExpiredSignatureError:
+            print('TOkne expired')
+            raise AuthError('Token is expired')
+        except jwt.JWTClaimsError as e:
+            print('Incorect claims')
+            raise e
+            raise AuthError('Incorrect claims, please check the audience and issuer')
+        except Exception as e:
+            print('unable to parse authentictn')
+            raise e
+            raise AuthError('Unable to parse authentication')
+
+        _request_ctx_stack.top.current_user = payload
+        return True
+    print('invalid header')
+    raise AuthError('Invalid header, unable to find appropriate key')
+

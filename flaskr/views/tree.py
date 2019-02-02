@@ -4,7 +4,7 @@ from ..exceptions import FormError, InvalidUsage
 from .base import index, create, get, update, delete
 from ..database import db
 from ..helpers import transform_species_votes
-from ..decorators import add_user_names
+from ..decorators import add_user_names, basic_authorization
 
 
 tree_bp = Blueprint("tree", __name__)
@@ -37,6 +37,7 @@ def create_tree(json):
 
 
 @tree_bp.route('/', methods=('GET', 'POST'))
+@basic_authorization
 @add_user_names
 def tree():
     if request.method == 'GET':

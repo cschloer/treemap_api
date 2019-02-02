@@ -6,11 +6,14 @@ from flask_migrate import Migrate
 from .models import *
 from .database import db
 from .redis import redis
-from .exceptions import InvalidUsage, FormError
+from .exceptions import (
+    InvalidUsage, FormError,
+    AuthError, ServerError,
+)
 from .views import (
     tree_bp, species_bp, tree_species_vote_bp,
     tree_image_bp, post_bp, post_comment_bp,
-    species_url_bp,
+    species_url_bp, crypto_bp,
 )
 import os
 
@@ -19,6 +22,8 @@ app = Flask(__name__)
 
 @app.errorhandler(InvalidUsage)
 @app.errorhandler(FormError)
+@app.errorhandler(AuthError)
+@app.errorhandler(ServerError)
 def handle_exception(error):
     response = jsonify(error.to_dict())
     response.status_code = error.status_code
@@ -40,6 +45,7 @@ app.register_blueprint(tree_species_vote_bp, url_prefix='/treespeciesvote')
 app.register_blueprint(tree_image_bp, url_prefix='/treeimage')
 app.register_blueprint(post_bp, url_prefix='/post')
 app.register_blueprint(post_comment_bp, url_prefix='/postcomment')
+app.register_blueprint(crypto_bp, url_prefix='/crypto')
 
 with app.app_context():
     db.init_app(app)
