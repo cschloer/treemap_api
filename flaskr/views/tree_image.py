@@ -9,11 +9,13 @@ import base64
 from ..models import TreeImage
 from .base import index, create, get, update, delete
 from ..exceptions import InvalidUsage
+from ..decorators import basic_authorization
 
 
 tree_image_bp = Blueprint("treeimage", __name__)
 
 @tree_image_bp.route('/', methods=('GET', 'POST'))
+@basic_authorization
 def tree_image():
     if request.method == 'GET':
         return index(TreeImage, request.args.copy())
@@ -21,6 +23,7 @@ def tree_image():
         return create(TreeImage, request.json)
 
 @tree_image_bp.route('/<int:id_>', methods=('GET', 'PUT', 'DELETE'))
+@basic_authorization
 def tree_image_id(id_):
     if request.method == 'GET':
         return get(TreeImage, id_)
@@ -30,6 +33,7 @@ def tree_image_id(id_):
         return delete(TreeImage, id_)
 
 @tree_image_bp.route('/storage/', methods=('POST',))
+@basic_authorization
 def tree_image_storage():
     if request.method == 'POST':
         args = request.json

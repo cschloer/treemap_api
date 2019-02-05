@@ -6,7 +6,7 @@ from ..decorators import add_user_names
 
 species_url_bp = Blueprint("speciesurl", __name__)
 
-@species_url_bp.route('/', methods=('GET', 'POST'))
+@species_url_bp.route('/', methods=['GET'])
 def species_url():
     if request.method == 'GET':
         return index(SpeciesUrl, request.args.copy())

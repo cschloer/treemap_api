@@ -2,11 +2,13 @@ from flask import Blueprint, request, jsonify
 from ..models import TreeSpeciesVote
 from ..exceptions import FormError, InvalidUsage
 from .base import index, create, get, update, delete
+from ..decorators import basic_authorization
 
 
 tree_species_vote_bp = Blueprint("tree_species_vote", __name__)
 
 @tree_species_vote_bp.route('/', methods=('GET', 'POST'))
+@basic_authorization
 def tree_species_vote():
     if request.method == 'GET':
         return index(TreeSpeciesVote, request.args.copy())
@@ -14,6 +16,7 @@ def tree_species_vote():
         return create(TreeSpeciesVote, request.json)
 
 @tree_species_vote_bp.route('/<int:id_>', methods=('GET', 'PUT', 'DELETE'))
+@basic_authorization
 def tree_species_vote_id(id_):
     if request.method == 'GET':
         return get(TreeSpeciesVote, id_)

@@ -1,3 +1,4 @@
+from flask import request
 from functools import wraps
 from .helpers import add_usernames
 from .auth0 import verify_auth
@@ -6,8 +7,10 @@ import json
 def basic_authorization(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        # Do authentication
-        verify_auth()
+        # A slight hack because no GET endpoints currently need auth
+        if request.method != 'GET':
+            # Do authentication
+            verify_auth()
 
         # Authentication was succesful, move on to the view
         return f(*args, **kwargs)

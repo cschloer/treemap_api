@@ -116,7 +116,6 @@ def verify_auth():
         raise ServerError('One or more AUTH0 environment variables not set')
     AUTH0_ALGORITHMS = AUTH0_ALGORITHMS_STRING.split(',')
 
-    print('Audience', AUTH0_API_AUDIENCE)
 
     token = get_token_auth_header()
     jsonurl = urlopen("https://"+AUTH0_DOMAIN+"/.well-known/jwks.json")
@@ -142,7 +141,7 @@ def verify_auth():
                 issuer=f'https://{AUTH0_DOMAIN}/',
             )
         except jwt.ExpiredSignatureError:
-            print('TOkne expired')
+            print('Token expired')
             raise AuthError('Token is expired')
         except jwt.JWTClaimsError as e:
             print('Incorect claims')
@@ -155,6 +154,6 @@ def verify_auth():
 
         _request_ctx_stack.top.current_user = payload
         return True
-    print('invalid header')
+    print('Invalid header')
     raise AuthError('Invalid header, unable to find appropriate key')
 

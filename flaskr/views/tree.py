@@ -49,7 +49,8 @@ def tree():
         return jsonify(tree)
 
 
-@tree_bp.route('/<int:id_>', methods=('GET', 'PUT', 'DELETE'))
+@tree_bp.route('/<int:id_>', methods=['GET'])
+@basic_authorization
 @add_user_names
 def tree_id(id_):
     if request.method == 'GET':

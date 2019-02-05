@@ -6,7 +6,7 @@ from .base import index, create, get, update, delete
 
 species_bp = Blueprint("species", __name__)
 
-@species_bp.route('/', methods=('GET', 'POST'))
+@species_bp.route('/', methods=['GET'])
 def species():
     if request.method == 'GET':
         return index(Species, request.args.copy())

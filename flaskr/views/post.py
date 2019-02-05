@@ -4,12 +4,13 @@ from ..exceptions import FormError, InvalidUsage
 from .base import index, create, get, update, delete
 from .tree import create_tree
 from ..database import db
-from ..decorators import add_user_names
+from ..decorators import add_user_names, basic_authorization
 
 
 post_bp = Blueprint("post", __name__)
 
 @post_bp.route('/', methods=('GET', 'POST'))
+@basic_authorization
 @add_user_names
 def post():
     if request.method == 'GET':
@@ -29,6 +30,7 @@ def post():
         return jsonify(post)
 
 @post_bp.route('/<int:id_>', methods=('GET',))
+@basic_authorization
 @add_user_names
 def post_id(id_):
     if request.method == 'GET':
