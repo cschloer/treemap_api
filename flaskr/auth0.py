@@ -8,6 +8,7 @@ import os
 import time
 import requests
 from .redis import redis
+from .settings import Settings
 
 def get_auth0_access_token():
     expires_at = redis.get('auth0_access_token_expires_at')
@@ -109,9 +110,9 @@ def get_token_auth_header():
     return token
 
 def verify_auth():
-    AUTH0_DOMAIN = os.environ.get('AUTH0_DOMAIN', None)
-    AUTH0_API_AUDIENCE = os.environ.get('AUTH0_API_AUDIENCE', None)
-    AUTH0_ALGORITHMS_STRING = os.environ.get('AUTH0_ALGORITHMS', None)
+    AUTH0_DOMAIN = Settings.get('AUTH0_DOMAIN')
+    AUTH0_API_AUDIENCE = Settings.get('AUTH0_API_AUDIENCE')
+    AUTH0_ALGORITHMS_STRING = Settings.get('AUTH0_ALGORITHMS')
     if not AUTH0_DOMAIN or not AUTH0_API_AUDIENCE or not AUTH0_ALGORITHMS_STRING:
         raise ServerError('One or more AUTH0 environment variables not set')
     AUTH0_ALGORITHMS = AUTH0_ALGORITHMS_STRING.split(',')

@@ -3,6 +3,7 @@ from flask import Flask, request, flash, url_for, redirect, \
      render_template, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+import os
 from .models import *
 from .database import db
 from .redis import redis
@@ -15,7 +16,7 @@ from .views import (
     tree_image_bp, post_bp, post_comment_bp,
     species_url_bp, crypto_bp,
 )
-import os
+from .settings import Settings
 
 
 app = Flask(__name__)
@@ -33,9 +34,9 @@ app.config.from_mapping(
     SECRET_KEY='dev',
     SQLALCHEMY_DATABASE_URI='sqlite:///' + os.path.join(app.instance_path, 'flaskr.sqlite'),
     SQLALCHEMY_TRACK_MODIFICATIONS=False,
-    GOOGLE_CLOUD_PROJECT_ID=os.environ['GOOGLE_CLOUD_PROJECT_ID'],
-    GOOGLE_CLOUD_STORAGE_BUCKET=os.environ['GOOGLE_CLOUD_STORAGE_BUCKET'],
-    GOOGLE_CLOUD_ALLOWED_EXTENSIONS=os.environ['GOOGLE_CLOUD_ALLOWED_EXTENSIONS'].split(','),
+    GOOGLE_CLOUD_PROJECT_ID=Settings.get('GOOGLE_CLOUD_PROJECT_ID'),
+    GOOGLE_CLOUD_STORAGE_BUCKET=Settings.get('GOOGLE_CLOUD_STORAGE_BUCKET'),
+    GOOGLE_CLOUD_ALLOWED_EXTENSIONS=Settings.get('GOOGLE_CLOUD_ALLOWED_EXTENSIONS').split(','),
 )
 
 app.register_blueprint(tree_bp, url_prefix='/tree')
