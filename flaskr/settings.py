@@ -21,4 +21,4 @@ class Settings():
         'record has been created. Go to the Developers Console for your app ' +
         'in App Engine, look up the Settings record with name=%s and enter ' +
         'its value in that record\'s value field.') % (name, name))
-    return retval.value
+    return retval['value']
