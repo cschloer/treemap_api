@@ -8,6 +8,7 @@ google-api-core==1.7.0
 google-cloud-core==0.29.1
 google-cloud-datastore==1.7.3
 google-cloud-storage==1.13.2
+grpcio==1.18.0
 itsdangerous==0.24
 Jinja2==2.10
 Mako==1.0.7

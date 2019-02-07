@@ -1,9 +1,12 @@
 from google.cloud import datastore
+import os
 
 class Settings():
 
   @staticmethod
   def get(name):
+    if os.environ.get('ENV') == 'local':
+        return os.environ.get(name)
     kind = 'Settings'
     NOT_SET_VALUE = "NOT SET"
 

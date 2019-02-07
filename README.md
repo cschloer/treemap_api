@@ -18,3 +18,7 @@ FLASK_ENV=development
 
 /usr/lib/google-cloud-sdk/bin/dev_appserver.py app.yaml
 
+
+gcloud app deploy
+gcloud app logs tail -s default
+
