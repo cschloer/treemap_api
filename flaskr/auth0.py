@@ -13,7 +13,10 @@ from .settings import Settings
 def get_auth0_access_token():
     expires_at = 0
     if redis.exists('auth0_access_token_expires_at'):
-        expires_at = redis.get('expires_at')
+        try:
+            expires_at = int(redis.get('auth0_access_token_expires_at'))
+        except ValueError:
+            expires_at = 0
     expired = expires_at - time.time() < 0
 
     if expired or not redis.exists('auth0_access_token'):
