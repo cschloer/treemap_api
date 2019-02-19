@@ -4,10 +4,8 @@ Flask-Cors==3.0.7
 Flask-Migrate==2.3.0
 Flask-SQLAlchemy==2.3.2
 Flask==1.0.2
-google-api-core==1.7.0
-google-cloud-core==0.29.1
 google-cloud-datastore==1.7.3
-google-cloud-storage==1.13.2
+google-cloud-storage==1.14.0
 grpcio==1.18.0
 itsdangerous==0.24
 Jinja2==2.10
