@@ -1,12 +1,1 @@
 runtime: python37
-
-env_variables:
-  FLASK_APP: 'flaskr'
-  FLASK_ENV: 'development'
-  GOOGLE_CLOUD_PROJECT_ID: 'treemap-227721'
-  GOOGLE_CLOUD_STORAGE_BUCKET: 'treemap'
-  GOOGLE_CLOUD_ALLOWED_EXTENSIONS: 'png,jpeg,jpg'
-  GOOGLE_APPLICATION_CREDENTIALS: '/home/conrad/Projects/treemap/credentials/treemap-ba56b9b9aa91.json'
-  AUTH0_DOMAIN: 'treemap.auth0.com'
-  AUTH0_API_AUDIENCE: 'https://treemap/'
-  AUTH0_ALGORITHMS: 'RS256'

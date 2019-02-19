@@ -6,7 +6,6 @@ from flask_migrate import Migrate
 import os
 from .models import *
 from .database import db
-from .redis import redis
 from .exceptions import (
     InvalidUsage, FormError,
     AuthError, ServerError,
