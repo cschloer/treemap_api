@@ -44,7 +44,10 @@ def get_user_names(user_ids):
     user_names = {}
     unknown_user_ids = []
     for user_id in user_ids:
-        user_name = redis.get(user_id)
+        if user_id.startswith('**'):
+            user_name = user_id[2:]
+        else:
+            user_name = redis.get(user_id)
         if user_name:
             user_names[user_id] = user_name
         else:

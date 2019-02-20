@@ -58,7 +58,6 @@ for tree in tree_list:
     else:
         failures += 1
 
-    break
     if (counter + failures) % 10 == 0:
         print(f'... {counter} species added, {failures} failed')
 print(f'Done. {counter} species added, {failures} failed')

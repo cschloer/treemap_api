@@ -29,9 +29,17 @@ def handle_exception(error):
     response.status_code = error.status_code
     return response
 
+db_host = Settings.get('DB_HOST')
+db_port = Settings.get('DB_PORT')
+db_name = Settings.get('DB_NAME')
+db_user = Settings.get('DB_USER')
+db_pass = Settings.get('DB_PASS')
+
 app.config.from_mapping(
     SECRET_KEY='dev',
-    SQLALCHEMY_DATABASE_URI='sqlite:///' + os.path.join(app.instance_path, 'flaskr.sqlite'),
+    #SQLALCHEMY_DATABASE_URI='sqlite:///' + os.path.join(app.instance_path, 'flaskr.sqlite'),
+    SQLALCHEMY_DATABASE_URI=f'postgresql://{db_user}:{db_pass}@{db_host}:{db_port}/{db_name}',
+
     SQLALCHEMY_TRACK_MODIFICATIONS=False,
     GOOGLE_CLOUD_PROJECT_ID=Settings.get('GOOGLE_CLOUD_PROJECT_ID'),
     GOOGLE_CLOUD_STORAGE_BUCKET=Settings.get('GOOGLE_CLOUD_STORAGE_BUCKET'),
